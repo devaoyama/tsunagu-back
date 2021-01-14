@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Services\Auth\FirebaseVerificationService;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
@@ -25,6 +28,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Auth::viaRequest('firebase', function (Request $request) {
+            $verificationService = new FirebaseVerificationService();
+            return $verificationService->verify($request->bearerToken());
+        });
     }
 }
