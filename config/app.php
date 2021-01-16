@@ -27,6 +27,7 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
+    'liff_channel_id' => env('LIFF_CHANNEL_ID'),
 
     /*
     |--------------------------------------------------------------------------

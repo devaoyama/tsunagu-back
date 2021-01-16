@@ -18,7 +18,7 @@ class AuthController extends Controller
             $response = $client->request('POST', 'https://api.line.me/oauth2/v2.1/verify', [
                 'form_params' => [
                     'id_token' => $idToken,
-                    'client_id' => '1655537420'
+                    'client_id' => config('app.liff_channel_id'),
                 ]
             ]);
             $lineInfo = json_decode($response->getBody()->getContents(), true);
