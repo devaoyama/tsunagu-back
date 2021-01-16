@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('uid')->unique();
             $table->string('name');
-            $table->string('profile_image_url');
+            $table->string('picture_url');
             $table->timestamps();
         });
     }
