@@ -42,7 +42,7 @@ return [
         ],
 
         'api' => [
-            'driver' => 'firebase',
+            'driver' => 'liff',
             'provider' => 'users',
             'hash' => false,
         ],

@@ -1,32 +1,29 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services\Auth;
 
 use App\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use Illuminate\Http\Request;
-use Kreait\Laravel\Firebase\Facades\Firebase;
 
-class AuthController extends Controller
+class LiffVerificationService implements VerificationServiceInterface
 {
-    public function auth(Request $request)
+    public function verify(string $token): ?User
     {
-        $idToken = $request->id_token;
         $client = new Client();
         try {
             $response = $client->request('POST', 'https://api.line.me/oauth2/v2.1/verify', [
                 'form_params' => [
-                    'id_token' => $idToken,
+                    'id_token' => $token,
                     'client_id' => config('app.liff_channel_id'),
                 ]
             ]);
             $lineInfo = json_decode($response->getBody()->getContents(), true);
         } catch (RequestException $exception) {
-            abort(response()->json(['error' => 'Unauthorized'], 401));
+            abort(response()->json(['error' => 'unauthorized'], 401));
         }
 
-        User::updateOrCreate(
+        return User::updateOrCreate(
             [
                 'uid' => $lineInfo['sub'],
             ],
@@ -35,7 +32,5 @@ class AuthController extends Controller
                 'picture_url' => $lineInfo['picture']
             ]
         );
-
-        return Firebase::auth()->createCustomToken($lineInfo['sub'])->toString();
     }
 }

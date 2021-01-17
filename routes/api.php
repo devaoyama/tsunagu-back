@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/auth', 'AuthController@auth');
-
-Route::apiResource('groups', 'GroupController');
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::apiResource('groups', 'GroupController');
+});
