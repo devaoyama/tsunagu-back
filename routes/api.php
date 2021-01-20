@@ -16,4 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('groups', 'GroupController');
+    Route::group(['prefix' => 'participants'], function () {
+        Route::post('request', 'ParticipantController@request');
+        Route::delete('leave/{group}', 'ParticipantController@leave');
+    });
 });
