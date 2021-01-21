@@ -10,4 +10,9 @@ class Group extends Model
         'name',
         'invitation_code',
     ];
+
+    public function participants()
+    {
+        $this->hasMany(Participant::class);
+    }
 }

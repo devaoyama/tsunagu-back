@@ -13,4 +13,9 @@ class User extends Authenticatable
         'name',
         'picture_url',
     ];
+
+    public function participants()
+    {
+        $this->hasMany(Participant::class);
+    }
 }
