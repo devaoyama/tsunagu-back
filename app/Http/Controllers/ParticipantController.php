@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ParticipantStatusType;
 use App\Group;
 use App\Participant;
 use Illuminate\Http\Request;
@@ -25,6 +26,22 @@ class ParticipantController extends Controller
                 'user_id' => $user->id,
             ]);
         });
+    }
+
+    public function accept(Participant $participant)
+    {
+        $participant->status = ParticipantStatusType::Accepted;
+        $participant->save();
+
+        return $participant;
+    }
+
+    public function reject(Participant $participant)
+    {
+        $participant->status = ParticipantStatusType::Rejected;
+        $participant->save();
+
+        return $participant;
     }
 
     public function leave(Group $group)

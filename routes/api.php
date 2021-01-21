@@ -18,6 +18,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('groups', 'GroupController');
     Route::group(['prefix' => 'participants'], function () {
         Route::post('request', 'ParticipantController@request');
+        Route::patch('accept/{participant}', 'ParticipantController@accept');
+        Route::patch('reject/{participant}', 'ParticipantController@reject');
         Route::delete('leave/{group}', 'ParticipantController@leave');
     });
 });
