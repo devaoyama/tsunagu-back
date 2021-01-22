@@ -20,6 +20,7 @@ class Group extends Model
             ->withPivot([
                 'status',
             ])
+            ->withTimestamps()
         ;
     }
 
