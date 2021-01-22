@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Enums\JoinStatusType;
 use App\Group;
+use App\Http\Requests\JoinRequestGroupRequest;
+use App\Http\Requests\StoreGroupRequest;
+use App\Http\Requests\UpdateGroupRequest;
 use App\Services\Group\InvitationCodeGeneratorInterface;
 use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class GroupController extends Controller
@@ -22,7 +24,7 @@ class GroupController extends Controller
         ;
     }
 
-    public function store(Request $request, InvitationCodeGeneratorInterface $invitationCodeGenerator)
+    public function store(StoreGroupRequest $request, InvitationCodeGeneratorInterface $invitationCodeGenerator)
     {
         $group = Group::create([
             'created_by' => Auth::user()->id,
@@ -43,7 +45,7 @@ class GroupController extends Controller
         return $group;
     }
 
-    public function update(Request $request, Group $group)
+    public function update(UpdateGroupRequest $request, Group $group)
     {
         $group->fill($request->all())->save();
         return $group;
@@ -55,7 +57,7 @@ class GroupController extends Controller
         return $group;
     }
 
-    public function joinRequest(Request $request)
+    public function joinRequest(JoinRequestGroupRequest $request)
     {
         $group = Group::firstWhere([
             'invitation_code' => $request->invitation_code
