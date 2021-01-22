@@ -9,15 +9,16 @@ class Participant extends Model
     protected $fillable = [
         'user_id',
         'group_id',
+        'status'
     ];
 
     public function user()
     {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function group()
     {
-        $this->belongsTo(Group::class);
+        return $this->belongsTo(Group::class);
     }
 }

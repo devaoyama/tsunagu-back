@@ -7,12 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class Group extends Model
 {
     protected $fillable = [
+        'created_by',
         'name',
         'invitation_code',
     ];
 
     public function participants()
     {
-        $this->hasMany(Participant::class);
+        return $this->hasMany(Participant::class);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class);
     }
 }
