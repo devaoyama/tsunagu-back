@@ -12,9 +12,15 @@ class User extends Authenticatable
         'picture_url',
     ];
 
-    public function participants()
+    public function groups()
     {
-        return $this->hasMany(Participant::class);
+        return $this
+            ->belongsToMany(Group::class, 'user_group')
+            ->using(UserGroup::class)
+            ->withPivot([
+                'status',
+            ])
+        ;
     }
 
     public function createdGroups()

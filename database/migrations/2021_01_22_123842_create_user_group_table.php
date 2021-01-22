@@ -1,11 +1,11 @@
 <?php
 
-use App\Enums\ParticipantStatusType;
+use App\Enums\JoinStatusType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateParticipantsTable extends Migration
+class CreateUserGroupTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +14,10 @@ class CreateParticipantsTable extends Migration
      */
     public function up()
     {
-        Schema::create('participants', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('user_group', function (Blueprint $table) {
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('group_id')->unsigned();
-            $table->string('status')->default(ParticipantStatusType::Waiting);
+            $table->string('status')->default(JoinStatusType::Waiting);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
@@ -33,6 +32,6 @@ class CreateParticipantsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('participants');
+        Schema::dropIfExists('user_groups');
     }
 }

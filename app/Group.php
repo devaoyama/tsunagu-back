@@ -12,9 +12,15 @@ class Group extends Model
         'invitation_code',
     ];
 
-    public function participants()
+    public function users()
     {
-        return $this->hasMany(Participant::class);
+        return $this
+            ->belongsToMany(User::class, 'user_group')
+            ->using(UserGroup::class)
+            ->withPivot([
+                'status',
+            ])
+        ;
     }
 
     public function createdBy()

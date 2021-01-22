@@ -9,7 +9,7 @@ use BenSampo\Enum\Enum;
  * @method static static OptionTwo()
  * @method static static OptionThree()
  */
-final class ParticipantStatusType extends Enum
+final class JoinStatusType extends Enum
 {
     /** @var int 承認待ち */
     const Waiting = 0;
