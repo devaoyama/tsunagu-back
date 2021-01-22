@@ -17,6 +17,17 @@ class Group extends Model
         return $this->hasMany(Participant::class);
     }
 
+    public function users()
+    {
+        return $this
+            ->belongsToMany(User::class, 'user_group')
+            ->using(UserGroup::class)
+            ->withPivot([
+                'status',
+            ])
+        ;
+    }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class);
