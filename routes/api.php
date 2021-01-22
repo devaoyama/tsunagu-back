@@ -16,10 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('groups', 'GroupController');
-    Route::group(['prefix' => 'participants'], function () {
-        Route::post('request', 'ParticipantController@request');
-        Route::patch('accept/{participant}', 'ParticipantController@accept');
-        Route::patch('reject/{participant}', 'ParticipantController@reject');
-        Route::delete('leave/{group}', 'ParticipantController@leave');
+    Route::group(['prefix' => 'groups'], function () {
+        Route::post('join_request', 'GroupController@joinRequest');
+        Route::post('join_accept/{user}/{group}', 'GroupController@joinAccept');
+        Route::post('join_reject/{user}/{group}', 'GroupController@joinReject');
+        Route::post('leave/{group}', 'GroupController@leave');
     });
 });

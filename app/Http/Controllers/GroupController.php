@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ParticipantStatusType;
+use App\Enums\JoinStatusType;
 use App\Group;
-use App\Participant;
 use App\Services\Group\InvitationCodeGeneratorInterface;
 use App\User;
 use Illuminate\Http\Request;
@@ -17,12 +16,10 @@ class GroupController extends Controller
         /** @var User $user */
         $user = Auth::user();
         return $user
-            ->participants()
-            ->whereHas('group', function ($query) {
-                $query->where('status', ParticipantStatusType::Accepted);
-            })
-            ->with('group')
-            ->get();
+            ->groups()
+            ->wherePivot('status', JoinStatusType::Accepted)
+            ->get()
+        ;
     }
 
     public function store(Request $request, InvitationCodeGeneratorInterface $invitationCodeGenerator)
@@ -32,10 +29,11 @@ class GroupController extends Controller
             'name' => $request->name,
             'invitation_code' => $invitationCodeGenerator->generate(),
         ]);
-        Participant::create([
-            'user_id' => Auth::user()->id,
-            'group_id' => $group->id,
-            'status' => ParticipantStatusType::Accepted,
+
+        /** @var User $user */
+        $user = Auth::user();
+        $user->groups()->attach($group->id, [
+            'status' => JoinStatusType::Accepted
         ]);
         return $group;
     }
@@ -55,5 +53,43 @@ class GroupController extends Controller
     {
         $group->delete();
         return $group;
+    }
+
+    public function joinRequest(Request $request)
+    {
+        $group = Group::firstWhere([
+            'invitation_code' => $request->invitation_code
+        ]);
+        if (!$group) {
+            abort(400);
+        }
+
+        /** @var User $user */
+        $user = Auth::user();
+        $user->groups()->attach($group->id);
+
+        return $group;
+    }
+
+    public function joinAccept(User $user, Group $group)
+    {
+        return $user->groups()->updateExistingPivot($group->id, [
+            'status' => JoinStatusType::Accepted,
+        ]);
+    }
+
+    public function joinReject(User $user, Group $group)
+    {
+        return $user->groups()->updateExistingPivot($group->id, [
+            'status' => JoinStatusType::Rejected,
+        ]);
+    }
+
+    public function leave(Group $group)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        return $user->groups()->detach($group);
     }
 }
