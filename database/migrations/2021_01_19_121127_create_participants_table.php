@@ -16,10 +16,13 @@ class CreateParticipantsTable extends Migration
     {
         Schema::create('participants', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id')->unsigned();
-            $table->integer('group_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('group_id')->unsigned();
             $table->string('status')->default(ParticipantStatusType::Waiting);
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('group_id')->references('id')->on('groups');
         });
     }
 

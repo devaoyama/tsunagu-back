@@ -16,6 +16,6 @@ class User extends Authenticatable
 
     public function participants()
     {
-        $this->hasMany(Participant::class);
+        return $this->hasMany(Participant::class);
     }
 }

@@ -13,11 +13,11 @@ class Participant extends Model
 
     public function user()
     {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function group()
     {
-        $this->belongsTo(Group::class);
+        return $this->belongsTo(Group::class);
     }
 }
