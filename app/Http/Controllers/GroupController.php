@@ -2,19 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ParticipantStatusType;
 use App\Group;
+use App\Participant;
+use App\Services\Group\InvitationCodeGeneratorInterface;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GroupController extends Controller
 {
     public function index()
     {
-        return Group::all();
+        /** @var User $user */
+        $user = Auth::user();
+        return $user
+            ->participants()
+            ->whereHas('group', function ($query) {
+                $query->where('status', ParticipantStatusType::Accepted);
+            })
+            ->with('group')
+            ->get();
     }
 
-    public function store(Request $request)
+    public function store(Request $request, InvitationCodeGeneratorInterface $invitationCodeGenerator)
     {
-        return Group::create($request->all());
+        $group = Group::create([
+            'name' => $request->name,
+            'invitation_code' => $invitationCodeGenerator->generate(),
+        ]);
+        Participant::create([
+            'user_id' => Auth::user()->id,
+            'group_id' => $group->id,
+            'status' => ParticipantStatusType::Accepted,
+        ]);
+        return $group;
     }
 
     public function show(Group $group)

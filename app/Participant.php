@@ -9,6 +9,7 @@ class Participant extends Model
     protected $fillable = [
         'user_id',
         'group_id',
+        'status'
     ];
 
     public function user()
