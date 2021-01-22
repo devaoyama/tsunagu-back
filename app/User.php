@@ -12,11 +12,6 @@ class User extends Authenticatable
         'picture_url',
     ];
 
-    public function participants()
-    {
-        return $this->hasMany(Participant::class);
-    }
-
     public function groups()
     {
         return $this
