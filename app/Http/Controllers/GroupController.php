@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Enums\JoinStatusType;
 use App\Group;
+use App\Http\Requests\JoinRequestGroupRequest;
+use App\Http\Requests\StoreGroupRequest;
+use App\Http\Requests\UpdateGroupRequest;
 use App\Services\Group\InvitationCodeGeneratorInterface;
 use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class GroupController extends Controller
 {
@@ -22,7 +25,7 @@ class GroupController extends Controller
         ;
     }
 
-    public function store(Request $request, InvitationCodeGeneratorInterface $invitationCodeGenerator)
+    public function store(StoreGroupRequest $request, InvitationCodeGeneratorInterface $invitationCodeGenerator)
     {
         $group = Group::create([
             'created_by' => Auth::user()->id,
@@ -43,7 +46,7 @@ class GroupController extends Controller
         return $group;
     }
 
-    public function update(Request $request, Group $group)
+    public function update(UpdateGroupRequest $request, Group $group)
     {
         $group->fill($request->all())->save();
         return $group;
@@ -55,13 +58,16 @@ class GroupController extends Controller
         return $group;
     }
 
-    public function joinRequest(Request $request)
+    public function joinRequest(JoinRequestGroupRequest $request)
     {
         $group = Group::firstWhere([
             'invitation_code' => $request->invitation_code
         ]);
         if (!$group) {
-            abort(400);
+            return response('招待コードが無効です', 400);
+        }
+        if (!Gate::allows('joinRequest', $group)) {
+            return response('申請することができません', 400);
         }
 
         /** @var User $user */
@@ -90,6 +96,6 @@ class GroupController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        return $user->groups()->detach($group);
+        return $user->groups()->detach($group->id);
     }
 }

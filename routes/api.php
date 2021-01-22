@@ -15,11 +15,29 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::apiResource('groups', 'GroupController');
     Route::group(['prefix' => 'groups'], function () {
+        Route::get('', 'GroupController@index');
+        Route::post('', 'GroupController@store')
+            ->middleware('can:store,App\Group')
+        ;
+        Route::get('{group}', 'GroupController@show')
+            ->middleware('can:show,group')
+        ;
+        Route::put('{group}', 'GroupController@update')
+            ->middleware('can:update,group')
+        ;
+        Route::delete('{group}', 'GroupController@destroy')
+            ->middleware('can:destroy,group')
+        ;
         Route::post('join_request', 'GroupController@joinRequest');
-        Route::post('join_accept/{user}/{group}', 'GroupController@joinAccept');
-        Route::post('join_reject/{user}/{group}', 'GroupController@joinReject');
-        Route::post('leave/{group}', 'GroupController@leave');
+        Route::post('join_accept/{user}/{group}', 'GroupController@joinAccept')
+            ->middleware('can:joinAccept,group,user')
+        ;
+        Route::post('join_reject/{user}/{group}', 'GroupController@joinReject')
+            ->middleware('can:joinReject,group,user')
+        ;
+        Route::post('leave/{group}', 'GroupController@leave')
+            ->middleware('can:leave,group,user')
+        ;
     });
 });

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Group;
+use App\Policies\GroupPolicy;
 use App\Services\Auth\LiffVerificationService;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -16,7 +18,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+        Group::class => GroupPolicy::class,
     ];
 
     /**
