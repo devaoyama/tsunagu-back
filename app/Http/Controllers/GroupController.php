@@ -28,6 +28,7 @@ class GroupController extends Controller
     public function store(Request $request, InvitationCodeGeneratorInterface $invitationCodeGenerator)
     {
         $group = Group::create([
+            'created_by' => Auth::user()->id,
             'name' => $request->name,
             'invitation_code' => $invitationCodeGenerator->generate(),
         ]);
