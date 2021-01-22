@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateGroupRequest;
 use App\Services\Group\InvitationCodeGeneratorInterface;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class GroupController extends Controller
 {
@@ -63,7 +64,10 @@ class GroupController extends Controller
             'invitation_code' => $request->invitation_code
         ]);
         if (!$group) {
-            abort(400);
+            return response('招待コードが無効です', 400);
+        }
+        if (!Gate::allows('joinRequest', $group)) {
+            return response('申請することができません', 400);
         }
 
         /** @var User $user */
