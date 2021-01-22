@@ -96,6 +96,6 @@ class GroupController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        return $user->groups()->detach($group);
+        return $user->groups()->detach($group->id);
     }
 }
