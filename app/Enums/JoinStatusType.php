@@ -5,9 +5,9 @@ namespace App\Enums;
 use BenSampo\Enum\Enum;
 
 /**
- * @method static static OptionOne()
- * @method static static OptionTwo()
- * @method static static OptionThree()
+ * @method static static Waiting()
+ * @method static static Accepted()
+ * @method static static Rejected()
  */
 final class JoinStatusType extends Enum
 {

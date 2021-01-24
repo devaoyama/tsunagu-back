@@ -11,13 +11,28 @@ class Event extends Model
         'comment',
     ];
 
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
+
     public function schedule()
     {
-        $this->belongsTo(Schedule::class);
+        return $this->belongsTo(Schedule::class);
     }
 
     public function schedules()
     {
         return $this->hasMany(Schedule::class);
+    }
+
+    public function place()
+    {
+        return $this->belongsTo(Place::class);
+    }
+
+    public function places()
+    {
+        return $this->hasMany(Place::class);
     }
 }
