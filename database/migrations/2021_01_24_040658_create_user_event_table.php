@@ -18,7 +18,7 @@ class CreateUserEventTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('event_id')->unsigned();
             $table->string('status')->default(JoinEventType::Waiting);
-            $table->text('comment');
+            $table->text('comment')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

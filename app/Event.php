@@ -11,6 +11,19 @@ class Event extends Model
         'comment',
     ];
 
+    public function users()
+    {
+        return $this
+            ->belongsToMany(User::class, 'user_event')
+            ->using(UserEvent::class)
+            ->withPivot([
+                'status',
+                'comment',
+            ])
+            ->withTimestamps()
+        ;
+    }
+
     public function group()
     {
         return $this->belongsTo(Group::class);

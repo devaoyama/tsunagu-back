@@ -40,4 +40,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             ->middleware('can:leave,group,user')
         ;
     });
+    Route::group(['prefix' => 'events'], function () {
+        Route::post('/{group}', 'EventController@store');
+    });
 });

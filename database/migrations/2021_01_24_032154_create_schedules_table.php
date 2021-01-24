@@ -15,7 +15,7 @@ class CreateSchedulesTable extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('event_id');
+            $table->bigInteger('event_id')->unsigned();
             $table->dateTime('datetime');
             $table->integer('ranking');
             $table->timestamps();

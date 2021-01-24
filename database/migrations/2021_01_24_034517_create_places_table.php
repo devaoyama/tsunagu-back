@@ -16,7 +16,7 @@ class CreatePlacesTable extends Migration
     {
         Schema::create('places', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('event_id');
+            $table->bigInteger('event_id')->unsigned();
             $table->string('type')->default(PlaceType::Restaurant);
             $table->string('address');
             $table->text('url');
