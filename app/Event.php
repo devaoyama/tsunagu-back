@@ -10,4 +10,14 @@ class Event extends Model
         'user_id',
         'comment',
     ];
+
+    public function schedule()
+    {
+        $this->belongsTo(Schedule::class);
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
 }
