@@ -24,6 +24,19 @@ class User extends Authenticatable
         ;
     }
 
+    public function events()
+    {
+        return $this
+            ->belongsToMany(Event::class, 'user_event')
+            ->using(UserEvent::class)
+            ->withPivot([
+                'status',
+                'comment',
+            ])
+            ->withTimestamps()
+        ;
+    }
+
     public function createdGroups()
     {
         return $this->hasMany(Group::class);
