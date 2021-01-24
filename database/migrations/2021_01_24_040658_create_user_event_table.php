@@ -1,11 +1,11 @@
 <?php
 
-use App\Enums\JoinStatusType;
+use App\Enums\JoinEventType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserGroupTable extends Migration
+class CreateUserEventTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,16 +14,15 @@ class CreateUserGroupTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_group', function (Blueprint $table) {
+        Schema::create('user_event', function (Blueprint $table) {
             $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('group_id')->unsigned();
-            $table->string('status')->default(JoinStatusType::Waiting);
+            $table->bigInteger('event_id')->unsigned();
+            $table->string('status')->default(JoinEventType::Waiting);
+            $table->text('comment');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('group_id')->references('id')->on('groups')
-                ->onDelete('cascade')
-            ;
+            $table->foreign('event_id')->references('id')->on('events');
         });
     }
 
@@ -34,6 +33,6 @@ class CreateUserGroupTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_group');
+        Schema::dropIfExists('user_event');
     }
 }
